@@ -48,8 +48,6 @@ const Home: NextPage = () => {
     <div>Syncing</div>
   );
 
-  if (!photoState.photo || !contentState.content) return null;
-
   return (
     <Main
       contentState={contentState}

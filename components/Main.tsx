@@ -11,6 +11,7 @@ import { State as PhotoState } from '../global-state/photo';
 import { State as ContentState } from '../global-state/content';
 import localStorageServices from '../services/local-storage-services';
 import Layout from './Layout';
+import Background from './Background';
 
 /**
  * Root
@@ -31,7 +32,11 @@ const Main: React.FC<MainCombinedProps> = ({
   photoState,
   contentState,
 }) => {
-  const photoIsFavorite = photoState.photo && localStorageServices.favoritePhotos.get('photos').includes(photoState.photo.id);
+  const { photo } = photoState;
+  const { content } = contentState;
+  const photoIsFavorite = photo && localStorageServices.favoritePhotos.get('photos').includes(photo.id);
+
+  if (!photo || !content) return null;
 
   return (
     <Root>
@@ -40,6 +45,14 @@ const Main: React.FC<MainCombinedProps> = ({
           Main Content
         </Layout.Main>
       </Layout>
+
+      <Background
+        lowResURL={photo.preview}
+        highResURL={photo.src}
+        overlayColor={photo.colors[0]}
+        fromPosition={photo.position?.from}
+        toPosition={photo.position?.to}
+      />
     </Root>
   );
 };
