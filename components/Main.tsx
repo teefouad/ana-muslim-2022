@@ -38,7 +38,7 @@ const Main: React.FC<MainCombinedProps> = ({
 
   if (!photo || !content) return null;
 
-  return (
+git add  return (
     <Root>
       <Layout>
         <Layout.Main>

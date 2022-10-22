@@ -8,6 +8,7 @@ import type { NextPage } from 'next';
  * Local imports
  */
 import Main from '../components/Main';
+import Syncing from '../components/Syncing';
 import contentStateManager from '../global-state/content';
 import photoStateManager from '../global-state/photo';
 import dataServices from '../services/data-services';
@@ -45,7 +46,7 @@ const Home: NextPage = () => {
   }, []);
 
   if (!readyToRender) return (
-    <div>Syncing</div>
+    <Syncing />
   );
 
   return (
