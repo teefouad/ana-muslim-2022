@@ -1,0 +1,18 @@
+{
+  "name": "Ana Muslim | أنا مسلم",
+  "version": "0.1.0",
+  "description": "AnaMuslim is a free Chrome extension that displays a beautiful image from nature, along with one of over 100 Hadeeth and Quranic verses each time you open a new tab on Chrome.",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "permissions": [
+    "notifications",
+    "geolocation"
+  ],
+  "manifest_version": 3
+}
