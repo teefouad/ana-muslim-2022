@@ -13,4 +13,4 @@ export const toRem = (px: number, includeUnit: boolean = true) => `${px / baseFo
  * @param text Text to process
  * @returns Text without diacritics
  */
-export const removeDiacritics = (text: string) => text && text.normalize('NFD').replace(/[\u064b-\u065e\u0670\u06d6-\u06dc\u06df-\u06ed]/g, '');
+export const removeDiacritics = (text: string) => text && text.replace(/[\u064b-\u065e\u0670\u06d6-\u06dc\u06df-\u06ed]/g, '');

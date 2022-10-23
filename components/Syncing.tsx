@@ -3,7 +3,6 @@
  */
 import React from 'react';
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
 
 /**
  * Local imports
@@ -12,9 +11,7 @@ import { css } from '@emotion/react';
 /**
  * Root
  */
-const Root = styled('div', {
-  shouldForwardProp: (prop: PropertyKey) => !([]).includes(prop.toString()),
-})<Partial<SyncingCombinedProps>>((props) => css``);
+const Root = styled.div``;
 
 /**
  * Component(s)

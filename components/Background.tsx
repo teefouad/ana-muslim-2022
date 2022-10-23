@@ -167,7 +167,7 @@ const Background: React.FC<BackgroundProps & JSX.IntrinsicElements['div']> = ({
 
 Background.defaultProps = {
   overlayColor: '#000',
-  overlayOpacity: 0.5,
+  overlayOpacity: 0.7,
   fromPosition: 'center',
   toPosition: 'center_right',
 };
