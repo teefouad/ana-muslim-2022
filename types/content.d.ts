@@ -11,6 +11,7 @@ declare interface Content {
     | 'duaa';
   head?: string;
   content: string;
+  translation?: string;
   tail?: string;
   source?: string;
   extra?: {

@@ -10,10 +10,10 @@ import Color from 'color';
 /**
  * Local imports
  */
-import Aya from '../common/Aya';
 import Text from '../common/Text';
 import StackedDiacritics from '../common/StackedDiacritics';
 import StyledDiacritics from '../common/StyledDiacritics';
+import Aya from '../common/Aya';
 import { toRem, removeDiacritics } from '../../utils/text';
 import ParenthesesSVG from '../../public/img/svgr/parentheses.svg';
 import surasData from '../../data/suras.json';

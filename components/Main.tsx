@@ -8,6 +8,7 @@ import styled from '@emotion/styled';
  * Local imports
  */
 import QuranWidget from './widgets/QuranWidget';
+import HadeethWidget from './widgets/HadeethWidget';
 import Background from './Background';
 import Layout from './Layout';
 import { State as PhotoState } from '../global-state/photo';
@@ -33,30 +34,48 @@ const Main: React.FC<MainCombinedProps> = ({
   photoState,
   contentState,
 }) => {
-  const [s, setS] = React.useState(1);
   const { photo } = photoState;
   const { content } = contentState;
   const photoIsFavorite = photo && localStorageServices.favoritePhotos.get('photos').includes(photo.id);
 
-  React.useEffect(() => {
-    window.s = s;
-    window.nextSura = () => {
-      setS(v => {
-        window.s = v + 1;
-        return v + 1;
-      });
-    }
-  }, []);
-
   if (!photo || !content) return null;
-
 
   return (
     <Root>
       <Layout>
         <Layout.Main>
 
-          <QuranWidget
+        {
+          content.type === 'hadeeth_nabawi' && (
+            <HadeethWidget
+              head={content.head}
+              content={content.content}
+              tail={content.tail}
+              textColor={photo.colors[2]}
+              altTextColor={photo.colors[1]}
+              backgroundColor={photo.colors[0]}
+            />
+          )
+        }
+
+        {
+          content.type === 'quran' && (
+            <QuranWidget
+              // head={content.head} // disabled temporarily
+              content={content.content}
+              // tail={content.tail} // disabled temporarily
+              translation={content.translation}
+              textColor={photo.colors[2]}
+              altTextColor={photo.colors[1]}
+              backgroundColor={photo.colors[0]}
+              sura={content.source ? +content.source?.split(':')[0] : undefined}
+              aya={content.source ? +content.source?.split(':')[1] : undefined}
+            />
+          )
+        }
+          
+
+          {/* <QuranWidget
                 // head={content.head}
                 // content={content.content}
                 // tail={content.tail}
@@ -71,7 +90,7 @@ const Main: React.FC<MainCombinedProps> = ({
                 // sura={Math.ceil(Math.random() * 114)}
                 sura={s}
                 onClick={(e) => e.shiftKey && setS(v => v + 1)}
-              />
+              /> */}
 
           {/* {
             content.type === 'quran' && (
