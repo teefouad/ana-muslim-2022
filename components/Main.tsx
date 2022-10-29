@@ -14,6 +14,10 @@ import Layout from './Layout';
 import { State as PhotoState } from '../global-state/photo';
 import { State as ContentState } from '../global-state/content';
 import localStorageServices from '../services/local-storage-services';
+import DateTimeWidget from './widgets/DateTimeWidget';
+import Digit from './common/Digit';
+import Clock from './common/Clock';
+import Digits from './common/Digits';
 
 /**
  * Root
@@ -45,68 +49,37 @@ const Main: React.FC<MainCombinedProps> = ({
       <Layout>
         <Layout.Main>
 
-        {
-          content.type === 'hadeeth_nabawi' && (
-            <HadeethWidget
-              head={content.head}
-              content={content.content}
-              tail={content.tail}
-              textColor={photo.colors[2]}
-              altTextColor={photo.colors[1]}
-              backgroundColor={photo.colors[0]}
-            />
-          )
-        }
-
-        {
-          content.type === 'quran' && (
-            <QuranWidget
-              // head={content.head} // disabled temporarily
-              content={content.content}
-              // tail={content.tail} // disabled temporarily
-              translation={content.translation}
-              textColor={photo.colors[2]}
-              altTextColor={photo.colors[1]}
-              backgroundColor={photo.colors[0]}
-              sura={content.source ? +content.source?.split(':')[0] : undefined}
-              aya={content.source ? +content.source?.split(':')[1] : undefined}
-            />
-          )
-        }
-          
-
-          {/* <QuranWidget
-                // head={content.head}
-                // content={content.content}
-                // tail={content.tail}
-                // head="بسم الله الرحمن الرحيم"
-                content="فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا 23"
-                translation="So, surely with hardship comes ease."
-                // tail="صدق الله العظيم"
-                textColor={photo.colors[2]}
-                altTextColor={photo.colors[1]}
-                backgroundColor={photo.colors[0]}
-                aya={12}
-                // sura={Math.ceil(Math.random() * 114)}
-                sura={s}
-                onClick={(e) => e.shiftKey && setS(v => v + 1)}
-              /> */}
+          <DateTimeWidget layout="2" lang="ar" calendar="gregorian" />
 
           {/* {
-            content.type === 'quran' && (
-              <QuranWidget
-                // head={content.head}
-                // content={content.content}
-                content="فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا 23"
-                // tail={content.tail}
+            content.type === 'hadeeth_nabawi' && (
+              <HadeethWidget
+                head={content.head}
+                content={content.content}
+                tail={content.tail}
                 textColor={photo.colors[2]}
                 altTextColor={photo.colors[1]}
                 backgroundColor={photo.colors[0]}
-                aya={12}
-                sura={1}
+              />
+            )
+          }
+
+          {
+            content.type === 'quran' && (
+              <QuranWidget
+                // head={content.head} // disabled temporarily
+                content={content.content}
+                // tail={content.tail} // disabled temporarily
+                translation={content.translation}
+                textColor={photo.colors[2]}
+                altTextColor={photo.colors[1]}
+                backgroundColor={photo.colors[0]}
+                sura={content.source ? +content.source?.split(':')[0] : undefined}
+                aya={content.source ? +content.source?.split(':')[1] : undefined}
               />
             )
           } */}
+
         </Layout.Main>
       </Layout>
 

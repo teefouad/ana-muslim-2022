@@ -55,7 +55,6 @@ const Root = styled('div', {
     position: relative;
     display: ${inline ? 'inline-block' : 'block'};
     transform: translateY(${toRem(offset!)});
-    font-weight: normal;
     -webkit-font-smoothing: ${smoothing};
 
     ${light && css`
