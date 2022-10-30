@@ -5,26 +5,28 @@ import React from 'react';
 import classnames from 'classnames';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
+import { toRem } from '../../utils/text';
 
 /**
  * Constants
  */
 export const DIGIT_SIZES = [
-  58, // 0
-  40, // 1
-  58, // 2
-  58, // 3
-  64, // 4
-  58, // 5
-  58, // 6
-  42, // 7
-  58, // 8
-  58, // 9
+  46, // 0
+  30, // 1
+  40, // 2
+  39, // 3
+  51, // 4
+  41, // 5
+  41, // 6
+  36, // 7
+  38, // 8
+  40, // 9
 ]; // width based on font-size = 100px
 
-export const DIGIT_CONTAINER_PADDING = 0;
+export const DIGIT_CONTAINER_PADDING = 1;
 
-export const getDigitSizeInEm = (value: number, baseFontSize: number = 100) => (DIGIT_SIZES[value] + 2 * DIGIT_CONTAINER_PADDING) / baseFontSize;
+export const getDigitSize = (value: number) => (DIGIT_SIZES[value] + 2 * DIGIT_CONTAINER_PADDING);
+export const getDigitSizeInEm = (value: number, baseFontSize: number = 100) => getDigitSize(value) / baseFontSize;
 
 /**
  * Root
@@ -76,24 +78,30 @@ const Root = styled('div', {
 
       &[data-state="running"] { animation-play-state: running; }
     }
+  }
 
-    ${
-      [
-        // [digit length, direction]
-        [700, -1],
-        [340, -1],
-        [570, -1],
-        [650, 1],
-        [710, 1],
-        [625, -1],
-        [750, -1],
-        [415, -1],
-        [820, -1],
-        [730, 1],
-      ].map(([length, dir], n) => css`
-        &[data-digit="${n}"] {
+  ${
+    [
+      // [digit length, direction]
+      [700, -1],
+      [340, -1],
+      [570, -1],
+      [650, 1],
+      [710, 1],
+      [625, -1],
+      [750, -1],
+      [415, -1],
+      [820, -1],
+      [730, 1],
+    ].map(([length, dir], n) => css`
+      &[data-digit="${n}"] {
+        > div {
+          width: ${getDigitSizeInEm(n)}em;
+        }
+
+        > svg {
           stroke-dasharray: ${length};
-          
+        
           &[data-direction="in"] {
             animation-name: digit-appear-${n};
 
@@ -115,8 +123,8 @@ const Root = styled('div', {
             }
           }
         }
-      `)
-    }
+      }
+    `)
   }
 `);
 
@@ -173,7 +181,6 @@ const SVGDigit: React.FC<{
         height: '100%',
         transform: 'translateX(-50%)',
       }}
-      data-digit={value}
       {...props}
     >
       <path
@@ -271,6 +278,7 @@ const Digit: React.FC<Props & JSX.IntrinsicElements['div']> = ({
       inDuration={inDuration!}
       outDuration={outDuration!}
       {...props}
+      data-digit={currentValue}
       className={classnames('wb-digit', props.className)}
     >
       <div>

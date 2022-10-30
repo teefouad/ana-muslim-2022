@@ -49,7 +49,14 @@ const Main: React.FC<MainCombinedProps> = ({
       <Layout>
         <Layout.Main>
 
-          <DateTimeWidget layout="2" lang="ar" calendar="gregorian" />
+          <DateTimeWidget
+            layout="1"
+            lang="ar"
+            calendar="gregorian"
+            textColor={photo.colors[2]}
+            altTextColor={photo.colors[1]}
+            backgroundColor={photo.colors[0]}
+          />
 
           {/* {
             content.type === 'hadeeth_nabawi' && (

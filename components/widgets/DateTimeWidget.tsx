@@ -47,7 +47,7 @@ const DECORATED_LABELS: { [label: string]: string } = {
   'ذو الحجة': 'ذو الحـجــــة',
 
   /* gregorian months */
-  'يناير': 'ينـــايـــــــر',
+  'يناير': 'ينـــايــــــر',
   'فبراير': 'فبــرايـــر',
   'مارس': 'مــــارس',
   'أبريل': 'أبـــريــــــل',
@@ -55,10 +55,10 @@ const DECORATED_LABELS: { [label: string]: string } = {
   'يونيو': 'يـونـيــــــو',
   'يوليو': 'يـولـيـــــو',
   'أغسطس': 'أغسطـس',
-  'سبتمبر': 'سبتـمـبـــــر',
-  'أكتوبر': 'أكـتـوبـــــر',
-  'نوفمبر': 'نوفـمـبـــــر',
-  'ديسمبر': 'ديسـمـبـــــر',
+  'سبتمبر': 'سبتـمـبــر',
+  'أكتوبر': 'أكـتـوبــر',
+  'نوفمبر': 'نوفمبــر',
+  'ديسمبر': 'ديسمبــر',
 };
 
 /**
@@ -67,7 +67,11 @@ const DECORATED_LABELS: { [label: string]: string } = {
 const Root = styled('section', {
   shouldForwardProp: (prop: PropertyKey) => !([
     'layout',
-    'color',
+    'textColor',
+    'altTextColor',
+    'backgroundColor',
+    'opacity',
+    'blurAmount',
     'day',
     'weekday',
     'direction',
@@ -93,17 +97,24 @@ const Root = styled('section', {
   const weekdayWidth = weekdayWidths[props.weekday?.replace(/ـ/g, '').toLowerCase()!];
 
   return css`
-    color: ${props.color};
+    color: ${props.textColor};
     user-select: none;
     direction: ${props.direction};
 
     ${props.layout === '1' && css`
       transform: translateX(${toRem(props.direction === 'rtl' ? -15 : 15)});
+      animation: wb-date-time-widget-appear-1 400ms ease-out 400ms both;
 
+      @keyframes wb-date-time-widget-appear-1 {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      
       .wb-date-time-widget__weekday {
         position: absolute;
         top: 50%;
         left: 50%;
+        padding: ${toRem(5)} ${toRem(20)} 0;
         transform: translate(-50%, -48%);
         font-size: ${toRem(36)};
         font-weight: 200;
@@ -116,7 +127,7 @@ const Root = styled('section', {
             bottom: ${toRem(7)};
             right: -${toRem(20)};
             left: -${toRem(20)};
-            border: 1px solid ${Color(props.color).alpha(0.25).string()};
+            border: 1px dashed ${Color(props.textColor).alpha(0.4).string()};
             border-top: none;
             border-bottom: none;
           }
@@ -128,7 +139,7 @@ const Root = styled('section', {
         top: 50%;
         inset-inline-end: 100%;
         margin-inline-end: ${toRem(20 + (weekdayWidth / 2))};
-        transform: translateY(-50%);
+        transform: translateY(-47%);
 
         .wb-clock {
           font-size: ${toRem(42)};
@@ -136,7 +147,7 @@ const Root = styled('section', {
 
         svg {
           path {
-            stroke-width: 12;
+            stroke-width: 10;
           }
         }
       }
@@ -146,12 +157,12 @@ const Root = styled('section', {
         top: 50%;
         inset-inline-start: 100%;
         margin-inline-start: ${toRem(20 + (weekdayWidth / 2))};
-        transform: translateY(-50%);
+        transform: translateY(-45%);
         font-size: ${toRem(42)};
 
         svg {
           path {
-            stroke-width: 12;
+            stroke-width: 10;
           }
         }
       }
@@ -161,7 +172,7 @@ const Root = styled('section', {
         position: absolute;
         top: 50%;
         inset-inline-start: calc(100% + ${getDigitsSizeInEm(toEnglishDigits(props.day!), 42)}em);
-        margin-inline-start: ${toRem(30 + (weekdayWidth / 2))};
+        margin-inline-start: ${toRem(40 + (weekdayWidth / 2))};
         transform: translateY(-50%);
         font-size: ${toRem(16)};
         font-weight: normal;
@@ -169,30 +180,44 @@ const Root = styled('section', {
       }
 
       .wb-date-time-widget__month {
-        margin-top: -${toRem(10)};
+        margin-top: -${toRem(7)};
       }
 
       .wb-date-time-widget__year {
-        margin-top: ${toRem(9)};
+        margin-top: ${toRem(11)};
       }
     `}
 
     ${props.layout === '2' && css`
       position: relative;
-      padding-top: ${toRem(110)};
+      padding-top: ${toRem(120)};
+      margin-top: -${toRem(20)};
 
       .wb-date-time-widget__time {
         position: absolute;
         top: 0;
         left: 50%;
         transform: translateX(-50%);
-        margin-left: ${toRem(-4)};
+
+        svg {
+          path {
+            stroke-width: 5;
+          }
+        }
       }
 
       .wb-date-time-widget__date {
         display: flex;
+        padding: ${toRem(20)} ${toRem(20)} 0;
         font-size: ${toRem(16)};
         font-weight: normal;
+        border-top: 1px dashed ${Color(props.textColor).alpha(0.4).string()};
+        animation: wb-date-time-widget__date-appear-2 400ms ease-out 400ms both;
+
+        @keyframes wb-date-time-widget__date-appear-2 {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
       }
 
       .wb-date-time-widget__month {
@@ -209,14 +234,14 @@ const Root = styled('section', {
           &:before {
             content: '';
             display: block;
-            width: ${toRem(1)};
-            height: ${toRem(20)};
+            width: ${toRem(4)};
+            height: ${toRem(4)};
             border-radius: 50%;
             position: absolute;
             top: 50%;
             inset-inline-start: -${toRem(2)};
-            margin-top: -${toRem(12)};
-            background: ${Color(props.color).alpha(0.35).string()};
+            margin-top: -${toRem(4)};
+            background: ${Color(props.altTextColor).string()};
           }
         }
       }
@@ -232,7 +257,11 @@ export interface DateTimeWidgetProps {
   timeMode?: '12' | '24',
   calendar?: 'hijri' | 'gregorian',
   lang?: 'ar' | 'en',
-  color?: string,
+  textColor?: string,
+  altTextColor?: string,
+  backgroundColor?: string,
+  opacity?: number,
+  blurAmount?: number,
 }
 
 export type DateTimeWidgetCombinedProps = DateTimeWidgetProps & JSX.IntrinsicElements['section'];
@@ -242,7 +271,6 @@ const DateTimeWidget: React.FC<DateTimeWidgetCombinedProps> = ({
   timeMode,
   calendar,
   lang,
-  color,
   ...props
 }) => {
   const date = useCurrentDate(calendar, lang);
@@ -256,7 +284,6 @@ const DateTimeWidget: React.FC<DateTimeWidgetCombinedProps> = ({
       className={classnames('wb-date-time-widget', props.className)}
       layout={layout}
       direction={direction}
-      color={color}
       day={date.day}
       weekday={weekday}
     >
@@ -274,7 +301,7 @@ const DateTimeWidget: React.FC<DateTimeWidgetCombinedProps> = ({
       <div className="wb-date-time-widget__date">
         <Text className="wb-date-time-widget__weekday">
           <Chameleon watch={[calendar, lang]}>
-            {layout === '1' ? DECORATED_LABELS[date.weekday] ?? date.weekday : date.weekday}
+            {DECORATED_LABELS[date.weekday] ?? date.weekday}
           </Chameleon>
         </Text>
 
@@ -292,7 +319,7 @@ const DateTimeWidget: React.FC<DateTimeWidgetCombinedProps> = ({
 
         <Text className="wb-date-time-widget__month">
           <Chameleon watch={[calendar, lang]}>
-            {layout === '1' ? DECORATED_LABELS[date.month] ?? date.month : date.month}
+            {DECORATED_LABELS[date.month] ?? date.month}
           </Chameleon>
         </Text>
 
@@ -311,7 +338,11 @@ DateTimeWidget.defaultProps = {
   timeMode: '12',
   calendar: 'hijri',
   lang: 'ar',
-  color: '#fff',
+  textColor: '#fff',
+  altTextColor: '#000',
+  backgroundColor: '#000',
+  opacity: 0.4,
+  blurAmount: 4,
 };
 
 export default DateTimeWidget;

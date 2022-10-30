@@ -39,6 +39,7 @@ const Root = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    align-items: center;
     top: 0;
     left: 50%;
     bottom: 0;
