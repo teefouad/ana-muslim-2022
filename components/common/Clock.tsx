@@ -23,7 +23,7 @@ const Root = styled('div', {
   shouldForwardProp: (prop: PropertyKey) => !([
     'mode',
     'align',
-    'periodSize',
+    'periodScale',
     'appeared',
     'hours',
     'minutes',
@@ -39,15 +39,18 @@ const Root = styled('div', {
 }>>(({
   mode,
   align,
-  periodSize,
+  periodScale,
   appeared,
   hours,
   minutes,
   alignTransitions,
 }) => {
-  const periodWidth = 0.5;
-  const periodSpacing = minutes?.slice(-1) === '7' ? -0.05 : 0.1;
-  const clockWidthInEm = getDigitsSizeInEm(hours!) + getDigitsSizeInEm(minutes!) + 0.2 + (mode === '12' ? periodSize! * periodWidth + periodSpacing * 0.357 : 0); // 0.2 = colon width, 0.5 = period width(45px / 100px), 0.1 = period left margin in em
+  const periodFontSizeInEm = 0.7;
+  const periodWidth = 0.912;
+  const periodSpacing = minutes?.slice(-1) === '7' ? -0.05 : 0.2;
+  const colonWidth = 0.2;
+  const colonSpacing = 0.04;
+  const clockWidthInEm = getDigitsSizeInEm(hours!) + getDigitsSizeInEm(minutes!) + (colonWidth + 2 * colonSpacing) + (mode === '12' ? periodScale! * periodWidth + periodSpacing * periodFontSizeInEm : 0); // 0.2 = colon width, 0.5 = period width(45px / 100px), 0.1 = period left margin in em
   const alignmentMultiplier = {
     start: 0,
     center: 0.5,
@@ -56,21 +59,21 @@ const Root = styled('div', {
 
   return css`
     position: relative;
-    user-select: none;
     direction: ltr;
     width: ${clockWidthInEm}em;
     height: 1em;
-    font-size: ${toRem(100)};
+    user-select: none;
     font-weight: 200;
+    line-height: 1;
     transition: ${alignTransitions ? `500ms width 100ms ${easing.softSnap}` : null};
-
+    
     .wb-clock__wrapper {
       position: absolute;
       top: 0;
       left: ${alignmentMultiplier[align!] * 100}%;
       margin-left: -${toRem(2)};
       display: block;
-      width: 0.2em;
+      width: ${colonWidth + 2 * colonSpacing}em;
       height: 100%;
       transform: translateX(${getDigitsSizeInEm(hours!) - alignmentMultiplier[align!] * clockWidthInEm}em);
       transition: ${alignTransitions ? `500ms transform 100ms ${easing.softSnap}` : null};
@@ -83,28 +86,30 @@ const Root = styled('div', {
     }
 
     .wb-clock__hours {
-      right: 100%;
+      right: calc(100% + ${colonSpacing}em);
+    }
+
+    .wb-clock__minutes {
+      left: calc(100% + ${colonSpacing}em);
     }
 
     .wb-clock__colon {
       position: relative;
-      top: -10%;
+      top: 10%;
       text-align: center;
+      font-size: 1.3em;
       text-indent: -0.035em;
-    }
-
-    .wb-clock__minutes {
-      left: 100%;
     }
 
     .wb-clock__period {
       position: absolute;
-      top: 58%;
+      top: 52%;
       left: 100%;
       display: inline-block;
-      font-size: 0.357em;
+      font-size: ${periodFontSizeInEm}em;
+      opacity: ${mode === '12' ? 1 : 0};
       transform-origin: 6% 62%;
-      transform: translateX(${(getDigitsSizeInEm(minutes!, 100) + periodSpacing) / 0.357}em) scale(${periodSize}); /* divide by 0.357 to undo time period font size reduction */
+      transform: translateX(${(getDigitsSizeInEm(minutes!, 100) + periodSpacing) / periodFontSizeInEm}em) scale(${periodScale}); /* divide by periodFontSizeInEm to undo time period font size reduction */
       animation-name: ${mode === '12' ? 'clock-time-period-appear' : 'clock-time-period-disappear'};
       animation-duration: ${mode === '12' ? '400ms' : '200ms'};
       animation-timing-function: ease-out;
@@ -133,7 +138,7 @@ interface Props {
   mode?: '12' | '24',
   strokeWidth?: number,
   align?: 'start' | 'center' | 'end',
-  periodSize?: number,
+  periodScale?: number,
 }
 
 const Clock: React.FC<Props & JSX.IntrinsicElements['div']> = ({
@@ -144,9 +149,7 @@ const Clock: React.FC<Props & JSX.IntrinsicElements['div']> = ({
   const [appeared, setAppeared] = React.useState(false);
   const time = useCurrentTime();
   const hours = leadZero(mode === '12' ? time.hours : time.hours24);
-  // const minutes = leadZero(time.minutes);
-  const [s, setS] = React.useState(0);
-  const minutes = leadZero(s);
+  const minutes = leadZero(time.minutes);
   const alignValueWasJustUpdated = useWatchTower(props.align);
 
   React.useEffect(() => {
@@ -167,7 +170,6 @@ const Clock: React.FC<Props & JSX.IntrinsicElements['div']> = ({
       appeared={appeared}
       period={time.period}
       alignTransitions={!alignValueWasJustUpdated}
-      onClick={() => setS(v => v === 59 ? 0 : v + 1)}
     >
       <div className="wb-clock__wrapper">
         <div className="wb-clock__hours">
@@ -202,7 +204,7 @@ Clock.defaultProps = {
   mode: '12',
   strokeWidth: 7,
   align: 'end',
-  periodSize: 1,
+  periodScale: 1,
 };
 
 export default Clock;

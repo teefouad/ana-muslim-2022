@@ -49,14 +49,36 @@ const Main: React.FC<MainCombinedProps> = ({
       <Layout>
         <Layout.Main>
 
+          {/* <div style={{ display: 'flex', color: '#fff', fontSize: 60 }}>
+            <Clock />
+          </div> */}
+          {/* <div style={{ color: '#fff', fontSize: 100 }}>
+            <Digits value="0123456789" />
+          </div> */}
+          {/* <div style={{ color: '#fff', fontSize: 100 }}>
+            <Digit value={0} />
+            <Digit value={1} />
+            <Digit value={2} />
+            <Digit value={3} />
+            <Digit value={4} />
+            <Digit value={5} />
+            <Digit value={6} />
+            <Digit value={7} />
+            <Digit value={8} />
+            <Digit value={9} />
+          </div> */}
+
           <DateTimeWidget
-            layout="1"
+            layout="4"
             lang="ar"
-            calendar="gregorian"
+            timeMode="12"
+            calendar="hijri"
             textColor={photo.colors[2]}
             altTextColor={photo.colors[1]}
             backgroundColor={photo.colors[0]}
           />
+
+          <h1>Widget Goes Here</h1>
 
           {/* {
             content.type === 'hadeeth_nabawi' && (

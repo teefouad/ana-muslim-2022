@@ -6,7 +6,7 @@ export const baseFontSize = 14;
  * @param includeUnit Whether the returned value should include the unit or not
  * @returns Value in rem
  */
-export const toRem = (px: number, includeUnit: boolean = true, precision: number = 3) => `${+(px / baseFontSize).toFixed(precision)}${includeUnit && 'rem'}`;
+export const toRem = (px: number, includeUnit: boolean = true, precision: number = 5) => `${+(px / baseFontSize).toFixed(precision)}${includeUnit && 'rem'}`;
 
 /**
  * Removes arabic diacritics from a piece of text

@@ -24,6 +24,9 @@ const Root = styled.div`
   left: ${toRem(40)};
   right: ${toRem(40)};
   bottom: ${toRem(40)};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   [data-layout-area] { position: absolute; }
 
@@ -40,11 +43,8 @@ const Root = styled.div`
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    top: 0;
-    left: 50%;
-    bottom: 0;
+    height: 100%;
     text-align: center;
-    transform: translateX(-50%);
   }
 `;
 

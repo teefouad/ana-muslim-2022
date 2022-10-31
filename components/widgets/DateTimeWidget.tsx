@@ -77,92 +77,61 @@ const Root = styled('section', {
     'direction',
   ]).includes(prop.toString()),
 })<Partial<DateTimeWidgetCombinedProps & { day: number, weekday: string, direction: string }>>((props) => {
-  const weekdayWidths: { [n: string]: number } = {
-    الجمعة: 186,
-    السبت: 190,
-    الأحد: 184,
-    الاثنين: 186,
-    الثلاثاء: 185,
-    الأربعاء: 184,
-    الخميس: 187,
-    friday: 129,
-    saturday: 166,
-    sunday: 143,
-    monday: 153,
-    tuesday: 156,
-    wednesday: 206,
-    thursday: 171,
-  };
-
-  const weekdayWidth = weekdayWidths[props.weekday?.replace(/ـ/g, '').toLowerCase()!];
-
   return css`
     color: ${props.textColor};
     user-select: none;
     direction: ${props.direction};
+    animation: wb-date-time-widget-appear 400ms ease-out 400ms both;
+
+    @keyframes wb-date-time-widget-appear {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
 
     ${props.layout === '1' && css`
-      transform: translateX(${toRem(props.direction === 'rtl' ? -15 : 15)});
-      animation: wb-date-time-widget-appear-1 400ms ease-out 400ms both;
+      display: flex;
+      align-items: center;
 
-      @keyframes wb-date-time-widget-appear-1 {
-        from { opacity: 0; }
-        to { opacity: 1; }
-      }
-      
       .wb-date-time-widget__weekday {
-        position: absolute;
-        top: 50%;
-        left: 50%;
         padding: ${toRem(5)} ${toRem(20)} 0;
-        transform: translate(-50%, -48%);
         font-size: ${toRem(36)};
-        font-weight: 200;
-
-        .wb-chameleon__wrapper {
-          &:before {
-            content: '';
-            position: absolute;
-            top: -${toRem(5)};
-            bottom: ${toRem(7)};
-            right: -${toRem(20)};
-            left: -${toRem(20)};
-            border: 1px dashed ${Color(props.textColor).alpha(0.4).string()};
-            border-top: none;
-            border-bottom: none;
-          }
-        }
+        font-weight: 300;
+        border: 1px dashed ${Color(props.textColor).alpha(0.4).string()};
+        border-top: none;
+        border-bottom: none;
       }
 
       .wb-date-time-widget__time {
-        position: absolute;
-        top: 50%;
-        inset-inline-end: 100%;
-        margin-inline-end: ${toRem(20 + (weekdayWidth / 2))};
-        transform: translateY(-47%);
+        margin-top: ${toRem(8)};
+        margin-inline-end: ${toRem(24)};
 
         .wb-clock {
-          font-size: ${toRem(42)};
+          font-size: ${toRem(30)};
+          font-weight: 300;
         }
 
         svg {
           path {
-            stroke-width: 10;
+            stroke-width: 14;
           }
         }
       }
 
+      .wb-date-time-widget__date {
+        display: flex;
+        align-items: center;
+        position: relative;
+        padding-inline-end: ${toRem(60)};
+      }
+
       .wb-date-time-widget__day {
-        position: absolute;
-        top: 50%;
-        inset-inline-start: 100%;
-        margin-inline-start: ${toRem(20 + (weekdayWidth / 2))};
-        transform: translateY(-45%);
-        font-size: ${toRem(42)};
+        margin-top: ${toRem(-8)};
+        margin-inline-start: ${toRem(24)};
+        font-size: ${toRem(30)};
 
         svg {
           path {
-            stroke-width: 10;
+            stroke-width: 14;
           }
         }
       }
@@ -171,37 +140,114 @@ const Root = styled('section', {
       .wb-date-time-widget__year {
         position: absolute;
         top: 50%;
-        inset-inline-start: calc(100% + ${getDigitsSizeInEm(toEnglishDigits(props.day!), 42)}em);
-        margin-inline-start: ${toRem(40 + (weekdayWidth / 2))};
-        transform: translateY(-50%);
+        inset-inline-start: 100%;
+        margin-inline-start: ${toRem(-50)};
         font-size: ${toRem(16)};
-        font-weight: normal;
+        font-weight: 500;
         white-space: nowrap;
       }
 
       .wb-date-time-widget__month {
-        margin-top: -${toRem(7)};
+        margin-top: ${toRem(props.direction === 'rtl' ? -25 : -22)};
       }
 
       .wb-date-time-widget__year {
-        margin-top: ${toRem(11)};
+        margin-top: ${toRem(-3)};
       }
     `}
 
     ${props.layout === '2' && css`
       position: relative;
-      padding-top: ${toRem(120)};
+
+      &:before {
+        content: '';
+        display: block;
+        height: ${toRem(50)};
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-top: ${toRem(-10)};
+        border-right: 1px dashed ${Color(props.textColor).alpha(0.4).string()};
+      }
+
+      .wb-date-time-widget__time {
+        position: absolute;
+        top: 100%;
+        inset-inline-end: ${toRem(30)};
+
+        .wb-clock {
+          font-size: ${toRem(30)};
+          font-weight: 300;
+        }
+
+        svg {
+          path {
+            stroke-width: 14;
+          }
+        }
+      }
+
+      .wb-date-time-widget__date {
+        position: absolute;
+        top: 100%;
+        inset-inline-start: ${toRem(30)};
+      }
+
+      .wb-date-time-widget__weekday {
+        position: absolute;
+        margin-inline-start: ${toRem(-30)};
+        margin-top: ${toRem(-20)};
+        font-size: ${toRem(36)};
+        font-weight: 300;
+        transform: translate(${props.direction === 'rtl' ? '50%' : '-50%'}, -100%);
+      }
+
+      .wb-date-time-widget__day {
+        margin-top: ${toRem(-12)};
+        font-size: ${toRem(30)};
+
+        svg {
+          path {
+            stroke-width: 14;
+          }
+        }
+      }
+
+      .wb-date-time-widget__month,
+      .wb-date-time-widget__year {
+        position: absolute;
+        top: 50%;
+        inset-inline-start: 100%;
+        margin-inline-start: ${toRem(15)};
+        font-size: ${toRem(16)};
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .wb-date-time-widget__month {
+        margin-top: ${toRem(props.direction === 'rtl' ? -27 : -23)};
+      }
+
+      .wb-date-time-widget__year {
+        margin-top: ${toRem(-4)};
+      }
+    `}
+
+    ${props.layout === '3' && css`
+      position: relative;
+      padding-top: ${toRem(90)};
       margin-top: -${toRem(20)};
 
       .wb-date-time-widget__time {
         position: absolute;
         top: 0;
         left: 50%;
+        font-size: ${toRem(60)};
         transform: translateX(-50%);
 
         svg {
           path {
-            stroke-width: 5;
+            stroke-width: 8;
           }
         }
       }
@@ -212,9 +258,9 @@ const Root = styled('section', {
         font-size: ${toRem(16)};
         font-weight: normal;
         border-top: 1px dashed ${Color(props.textColor).alpha(0.4).string()};
-        animation: wb-date-time-widget__date-appear-2 400ms ease-out 400ms both;
+        animation: wb-date-time-widget__date-appear-3 400ms ease-out 400ms both;
 
-        @keyframes wb-date-time-widget__date-appear-2 {
+        @keyframes wb-date-time-widget__date-appear-3 {
           from { opacity: 0; }
           to { opacity: 1; }
         }
@@ -246,6 +292,71 @@ const Root = styled('section', {
         }
       }
     `}
+
+    ${props.layout === '4' && css`
+      position: absolute;
+
+      .wb-date-time-widget__time {
+        position: fixed;
+        top: ${toRem(30)};
+        inset-inline-end: ${toRem(30)};
+
+        .wb-clock {
+          font-size: ${toRem(30)};
+          font-weight: 300;
+        }
+
+        svg {
+          path {
+            stroke-width: 14;
+          }
+        }
+      }
+
+      .wb-date-time-widget__date {
+        display: flex;
+        position: fixed;
+        top: ${toRem(30)};
+        inset-inline-start: ${toRem(30)};
+      }
+
+      .wb-date-time-widget__weekday {
+        margin-inline-end: ${toRem(15)};
+        padding-inline-end: ${toRem(15)};
+        border-inline-end: 1px dashed ${Color(props.textColor).alpha(0.4).string()};
+        font-size: ${toRem(36)};
+        font-weight: 300;
+      }
+      
+      .wb-date-time-widget__day {
+        font-size: ${toRem(30)};
+
+        svg {
+          path {
+            stroke-width: 14;
+          }
+        }
+      }
+
+      .wb-date-time-widget__month,
+      .wb-date-time-widget__year {
+        position: absolute;
+        top: 50%;
+        inset-inline-start: 100%;
+        margin-inline-start: ${toRem(10)};
+        font-size: ${toRem(16)};
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .wb-date-time-widget__month {
+        margin-top: ${toRem(props.direction === 'rtl' ? -26 : -22)};
+      }
+
+      .wb-date-time-widget__year {
+        margin-top: ${toRem(-3)};
+      }
+    `}
   `;
 });
 
@@ -253,7 +364,7 @@ const Root = styled('section', {
  * DateTimeWidget Component
  */
 export interface DateTimeWidgetProps {
-  layout?: '1' | '2' | '3',
+  layout?: '1' | '2' | '3' | '4',
   timeMode?: '12' | '24',
   calendar?: 'hijri' | 'gregorian',
   lang?: 'ar' | 'en',
@@ -294,24 +405,35 @@ const DateTimeWidget: React.FC<DateTimeWidgetCombinedProps> = ({
         <Clock
           mode={timeMode!}
           align={clockAlign}
-          periodSize={layout === '1' ? 2 : 1}
+          periodScale={{
+            1: 1.2,
+            2: 1.2,
+            3: 1,
+            4: 1.2,
+          }[layout ?? 1]}
         />
       </Chameleon>
 
       <div className="wb-date-time-widget__date">
         <Text className="wb-date-time-widget__weekday">
           <Chameleon watch={[calendar, lang]}>
-            {DECORATED_LABELS[date.weekday] ?? date.weekday}
+            {
+              layout === '4' ? (
+                date.weekday
+              ) : (
+                DECORATED_LABELS[date.weekday] ?? date.weekday
+              )
+            }
           </Chameleon>
         </Text>
 
         <Text className="wb-date-time-widget__day">
           <Chameleon watch={[calendar, lang]}>
             {
-              layout === '1' ? (
-                <Digits value={toEnglishDigits(date.day)} />
-              ) : (
+              layout === '3' ? (
                 toEnglishDigits(date.day)
+              ) : (
+                <Digits value={toEnglishDigits(date.day)} />
               )
             }
           </Chameleon>
@@ -319,7 +441,9 @@ const DateTimeWidget: React.FC<DateTimeWidgetCombinedProps> = ({
 
         <Text className="wb-date-time-widget__month">
           <Chameleon watch={[calendar, lang]}>
-            {DECORATED_LABELS[date.month] ?? date.month}
+            {
+              DECORATED_LABELS[date.month] ?? date.month
+            }
           </Chameleon>
         </Text>
 

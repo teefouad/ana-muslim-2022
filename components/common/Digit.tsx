@@ -11,19 +11,19 @@ import { toRem } from '../../utils/text';
  * Constants
  */
 export const DIGIT_SIZES = [
-  46, // 0
+  68, // 0
   30, // 1
-  40, // 2
-  39, // 3
-  51, // 4
-  41, // 5
-  41, // 6
-  36, // 7
-  38, // 8
-  40, // 9
+  60, // 2
+  58, // 3
+  76, // 4
+  60, // 5
+  60, // 6
+  53, // 7
+  57, // 8
+  59, // 9
 ]; // width based on font-size = 100px
 
-export const DIGIT_CONTAINER_PADDING = 1;
+export const DIGIT_CONTAINER_PADDING = 5;
 
 export const getDigitSize = (value: number) => (DIGIT_SIZES[value] + 2 * DIGIT_CONTAINER_PADDING);
 export const getDigitSizeInEm = (value: number, baseFontSize: number = 100) => getDigitSize(value) / baseFontSize;
@@ -50,7 +50,7 @@ const Root = styled('div', {
   line-height: 1;
 
   > div {
-    height: 0.65em;
+    height: 1em;
     opacity: 0;
   }
 
@@ -125,6 +125,12 @@ const Root = styled('div', {
         }
       }
     `)
+  }
+
+  &[data-digit="1"] {
+    > svg {
+      margin-left: ${toRem(-2)};
+    }
   }
 `);
 

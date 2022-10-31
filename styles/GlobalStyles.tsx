@@ -4,9 +4,9 @@
 import { Global, css } from '@emotion/react';
 
 /**
- * Constants
+ * Local imports
  */
-export const baseFontSize = 14;
+import { baseFontSize } from '../utils/text';
 
 /**
  * Component(s)
@@ -32,7 +32,7 @@ const GlobalStyles = () => {
           overflow: hidden;
           font-family: AnaMuslim-Tajawal;
           font-weight: 500;
-          font-size: ${100 * baseFontSize / 1440}vw;
+          font-size: ${baseFontSize}px;
         }
       `}
     />
