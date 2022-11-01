@@ -13,7 +13,7 @@ import Color from 'color';
 import Chameleon from '../common/Chameleon';
 import Text from '../common/Text';
 import Clock from '../common/Clock';
-import Digits, { getDigitsSizeInEm } from '../common/Digits';
+import Digits from '../common/Digits';
 import { useCurrentDate } from '../../hooks/use-current-date';
 import { useChameleon } from '../../hooks/use-chameleon';
 import { toRem } from '../../utils/text';
@@ -35,30 +35,30 @@ const DECORATED_LABELS: { [label: string]: string } = {
   /* hijri months */
   'محرم': 'مـحــــــرم',
   'صفر': 'صـــفــــــر',
-  'ربيع الأول': 'ربـيـــــع الأول',
-  'ربيع الآخر': 'ربـيـــــع الآخــر',
-  'جمادى الأولى': 'جـمـــادى الأولــى',
-  'جمادى الآخرة': 'جـمـــادى الآخـــرة',
+  'ربيع الأول': 'ربيـع الأول',
+  'ربيع الآخر': 'ربيـع الآخـر',
+  'جمادى الأولى': 'جمادى الأولى',
+  'جمادى الآخرة': 'جمادى الآخرة',
   'رجب': 'رجــــــــــــب',
-  'شعبان': 'شعبـــان',
-  'رمضان': 'رمضـــان',
+  'شعبان': 'شعبـان',
+  'رمضان': 'رمضـان',
   'شوال': 'شــــــوال',
-  'ذو القعدة': 'ذو القـعــــدة',
-  'ذو الحجة': 'ذو الحـجــــة',
+  'ذو القعدة': 'ذو القعدة',
+  'ذو الحجة': 'ذو الحجـة',
 
   /* gregorian months */
-  'يناير': 'ينـــايــــــر',
-  'فبراير': 'فبــرايـــر',
-  'مارس': 'مــــارس',
-  'أبريل': 'أبـــريــــــل',
-  'مايو': 'مـــايـــــــو',
-  'يونيو': 'يـونـيــــــو',
-  'يوليو': 'يـولـيـــــو',
-  'أغسطس': 'أغسطـس',
-  'سبتمبر': 'سبتـمـبــر',
-  'أكتوبر': 'أكـتـوبــر',
-  'نوفمبر': 'نوفمبــر',
-  'ديسمبر': 'ديسمبــر',
+  'يناير': 'ينـايـــــــر',
+  'فبراير': 'فبـرايــر',
+  'مارس': 'مــارس',
+  'أبريل': 'أبـريـــــل',
+  'مايو': 'مــايـــــــو',
+  'يونيو': 'يـونـيــــو',
+  'يوليو': 'يـولـيــــو',
+  'أغسطس': 'أغسطس',
+  'سبتمبر': 'سبتمبر',
+  'أكتوبر': 'أكـتـوبـر',
+  'نوفمبر': 'نوفمبر',
+  'ديسمبر': 'ديسمبر',
 };
 
 /**
@@ -69,14 +69,10 @@ const Root = styled('section', {
     'layout',
     'textColor',
     'altTextColor',
-    'backgroundColor',
-    'opacity',
-    'blurAmount',
-    'day',
-    'weekday',
+    'month',
     'direction',
   ]).includes(prop.toString()),
-})<Partial<DateTimeWidgetCombinedProps & { day: number, weekday: string, direction: string }>>((props) => {
+})<Partial<DateTimeWidgetCombinedProps & { month: string, direction: string }>>((props) => {
   return css`
     color: ${props.textColor};
     user-select: none;
@@ -92,18 +88,14 @@ const Root = styled('section', {
       display: flex;
       align-items: center;
 
-      .wb-date-time-widget__weekday {
-        padding: ${toRem(5)} ${toRem(20)} 0;
-        font-size: ${toRem(36)};
-        font-weight: 300;
-        border: 1px dashed ${Color(props.textColor).alpha(0.4).string()};
-        border-top: none;
-        border-bottom: none;
-      }
-
       .wb-date-time-widget__time {
-        margin-top: ${toRem(8)};
-        margin-inline-end: ${toRem(24)};
+        order: 1;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        padding-inline-start: ${toRem(20)};
+        margin-inline-start: ${toRem(20)};
+        border-inline-start: 1px dashed ${Color(props.textColor).alpha(0.4).string()};
 
         .wb-clock {
           font-size: ${toRem(30)};
@@ -121,12 +113,72 @@ const Root = styled('section', {
         display: flex;
         align-items: center;
         position: relative;
-        padding-inline-end: ${toRem(60)};
+        margin-inline-end: ${toRem(({
+          'محرم': 48,
+          'صفر': 48,
+          'ربيع الأول': 70,
+          'ربيع الآخر': 66,
+          'جمادى الأولى': 89,
+          'جمادى الآخرة': 88,
+          'رجب': 52,
+          'شعبان': 52,
+          'رمضان': 52,
+          'شوال': 53,
+          'ذو القعدة': 68,
+          'ذو الحجة': 62,
+          
+          'Muharram': 73,
+          'Safar': 57,
+          'Rabiʻ I': 57,
+          'Rabiʻ II': 57,
+          'Jumada I': 60,
+          'Jumada II': 64,
+          'Rajab': 57,
+          'Shaʻban': 56,
+          'Ramadan': 64,
+          'Shawwal': 60,
+          'Dhuʻl-Qiʻdah': 87,
+          'Dhuʻl-Hijjah': 81,
+
+          'يناير': 46,
+          'فبراير': 46,
+          'مارس': 46,
+          'أبريل': 46,
+          'مايو': 46,
+          'يونيو': 46,
+          'يوليو': 46,
+          'أغسطس': 67,
+          'سبتمبر': 50,
+          'أكتوبر': 46,
+          'نوفمبر': 46,
+          'ديسمبر': 53,
+
+          'January': 55,
+          'February': 62,
+          'March': 55,
+          'April': 55,
+          'May': 55,
+          'June': 55,
+          'July': 55,
+          'August': 55,
+          'September': 77,
+          'October': 57,
+          'November': 72,
+          'December': 72,
+        } as { [month: string]: number })[props.month!] + 15)}; /* 15 = month and year margin */
+      }
+
+      .wb-date-time-widget__weekday {
+        margin-top: ${toRem(4)};
+        padding-inline-end: ${toRem(20)};
+        margin-inline-end: ${toRem(20)};
+        border-inline-end: 1px dashed ${Color(props.textColor).alpha(0.4).string()};
+        font-size: ${toRem(36)};
+        font-weight: 300;
       }
 
       .wb-date-time-widget__day {
         margin-top: ${toRem(-8)};
-        margin-inline-start: ${toRem(24)};
         font-size: ${toRem(30)};
 
         svg {
@@ -141,18 +193,18 @@ const Root = styled('section', {
         position: absolute;
         top: 50%;
         inset-inline-start: 100%;
-        margin-inline-start: ${toRem(-50)};
+        margin-inline-start: ${toRem(15)};
         font-size: ${toRem(16)};
         font-weight: 500;
         white-space: nowrap;
       }
 
       .wb-date-time-widget__month {
-        margin-top: ${toRem(props.direction === 'rtl' ? -25 : -22)};
+        margin-top: ${toRem(props.direction === 'rtl' ? -23 : -22)};
       }
 
       .wb-date-time-widget__year {
-        margin-top: ${toRem(-3)};
+        margin-top: ${toRem(-2)};
       }
     `}
 
@@ -229,7 +281,7 @@ const Root = styled('section', {
       }
 
       .wb-date-time-widget__year {
-        margin-top: ${toRem(-4)};
+        margin-top: ${toRem(props.direction === 'rtl' ? -4 : -3)};
       }
     `}
 
@@ -254,7 +306,7 @@ const Root = styled('section', {
 
       .wb-date-time-widget__date {
         display: flex;
-        padding: ${toRem(20)} ${toRem(20)} 0;
+        padding: ${toRem(20)} ${toRem(30)} 0;
         font-size: ${toRem(16)};
         font-weight: normal;
         border-top: 1px dashed ${Color(props.textColor).alpha(0.4).string()};
@@ -298,8 +350,8 @@ const Root = styled('section', {
 
       .wb-date-time-widget__time {
         position: fixed;
-        top: ${toRem(30)};
-        inset-inline-end: ${toRem(30)};
+        top: ${toRem(43)};
+        inset-inline-end: ${toRem(40)};
 
         .wb-clock {
           font-size: ${toRem(30)};
@@ -317,10 +369,11 @@ const Root = styled('section', {
         display: flex;
         position: fixed;
         top: ${toRem(30)};
-        inset-inline-start: ${toRem(30)};
+        inset-inline-start: ${toRem(40)};
       }
 
       .wb-date-time-widget__weekday {
+        margin-top: ${toRem(2)};
         margin-inline-end: ${toRem(15)};
         padding-inline-end: ${toRem(15)};
         border-inline-end: 1px dashed ${Color(props.textColor).alpha(0.4).string()};
@@ -343,18 +396,18 @@ const Root = styled('section', {
         position: absolute;
         top: 50%;
         inset-inline-start: 100%;
-        margin-inline-start: ${toRem(10)};
+        margin-inline-start: ${toRem(15)};
         font-size: ${toRem(16)};
         font-weight: 500;
         white-space: nowrap;
       }
 
       .wb-date-time-widget__month {
-        margin-top: ${toRem(props.direction === 'rtl' ? -26 : -22)};
+        margin-top: ${toRem(props.direction === 'rtl' ? -24 : -22)};
       }
 
       .wb-date-time-widget__year {
-        margin-top: ${toRem(-3)};
+        margin-top: ${toRem(props.direction === 'rtl' ? -3 : -2)};
       }
     `}
   `;
@@ -370,9 +423,6 @@ export interface DateTimeWidgetProps {
   lang?: 'ar' | 'en',
   textColor?: string,
   altTextColor?: string,
-  backgroundColor?: string,
-  opacity?: number,
-  blurAmount?: number,
 }
 
 export type DateTimeWidgetCombinedProps = DateTimeWidgetProps & JSX.IntrinsicElements['section'];
@@ -387,7 +437,7 @@ const DateTimeWidget: React.FC<DateTimeWidgetCombinedProps> = ({
   const date = useCurrentDate(calendar, lang);
   const [direction] = useChameleon(lang === 'ar' ? 'rtl' : 'ltr', [lang]);
   const [clockAlign] = useChameleon(layout === '2' ? 'center' : (lang === 'ar' ? 'start' : 'end'), [layout, lang]);
-  const [weekday] = useChameleon(date.weekday, [calendar, lang]);
+  const [month] = useChameleon(date.month, [calendar, lang]);
 
   return (
     <Root
@@ -395,8 +445,7 @@ const DateTimeWidget: React.FC<DateTimeWidgetCombinedProps> = ({
       className={classnames('wb-date-time-widget', props.className)}
       layout={layout}
       direction={direction}
-      day={date.day}
-      weekday={weekday}
+      month={month}
     >
       <Chameleon
         className="wb-date-time-widget__time"
@@ -433,7 +482,7 @@ const DateTimeWidget: React.FC<DateTimeWidgetCombinedProps> = ({
               layout === '3' ? (
                 toEnglishDigits(date.day)
               ) : (
-                <Digits value={toEnglishDigits(date.day)} />
+                <Digits value={toEnglishDigits(date.day)} outDuration={0} />
               )
             }
           </Chameleon>
@@ -464,9 +513,6 @@ DateTimeWidget.defaultProps = {
   lang: 'ar',
   textColor: '#fff',
   altTextColor: '#000',
-  backgroundColor: '#000',
-  opacity: 0.4,
-  blurAmount: 4,
 };
 
 export default DateTimeWidget;
