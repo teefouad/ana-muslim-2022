@@ -134,7 +134,7 @@ const Root = styled('div', {
 /**
  * Clock Component
  */
-interface Props {
+export interface Props {
   mode?: '12' | '24',
   strokeWidth?: number,
   align?: 'start' | 'center' | 'end',

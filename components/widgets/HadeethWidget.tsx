@@ -68,7 +68,7 @@ const Root = styled('section', {
 
     .wb-diacritics {
       opacity: 0.5;
-      color: ${altTextColor};
+      color: ${textColor};
     }
 
     *::selection {

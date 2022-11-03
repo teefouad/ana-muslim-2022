@@ -18,6 +18,7 @@ import { useCurrentDate } from '../../hooks/use-current-date';
 import { useChameleon } from '../../hooks/use-chameleon';
 import { toRem } from '../../utils/text';
 import { toEnglishDigits } from '../../utils/numbers';
+import ClockWidget from './ClockWidget';
 
 /**
  * Constants
@@ -97,7 +98,7 @@ const Root = styled('section', {
         margin-inline-start: ${toRem(20)};
         border-inline-start: 1px dashed ${Color(props.textColor).alpha(0.4).string()};
 
-        .wb-clock {
+        .wb-clock-widget {
           font-size: ${toRem(30)};
           font-weight: 300;
         }
@@ -227,7 +228,7 @@ const Root = styled('section', {
         top: 100%;
         inset-inline-end: ${toRem(30)};
 
-        .wb-clock {
+        .wb-clock-widget {
           font-size: ${toRem(30)};
           font-weight: 300;
         }
@@ -236,6 +237,15 @@ const Root = styled('section', {
           path {
             stroke-width: 14;
           }
+        }
+
+        ${
+          props.direction === 'rtl' && css`
+            .wb-clock,
+            .wb-clock__wrapper {
+              transition: none; // fixes a weird flickering bug when language is Arabic
+            }
+          `
         }
       }
 
@@ -353,7 +363,7 @@ const Root = styled('section', {
         top: ${toRem(43)};
         inset-inline-end: ${toRem(40)};
 
-        .wb-clock {
+        .wb-clock-widget {
           font-size: ${toRem(30)};
           font-weight: 300;
         }
@@ -451,7 +461,7 @@ const DateTimeWidget: React.FC<DateTimeWidgetCombinedProps> = ({
         className="wb-date-time-widget__time"
         watch={[lang]}
       >
-        <Clock
+        <ClockWidget
           mode={timeMode!}
           align={clockAlign}
           periodScale={{

@@ -21,6 +21,7 @@ import Digits from './common/Digits';
 import { Button, Group } from '@mantine/core';
 import Chameleon from './common/Chameleon';
 import { getDatePartsFromCalendar } from '../utils/date-time';
+import ClockWidget from './widgets/ClockWidget';
 
 /**
  * Root
@@ -48,7 +49,7 @@ const Main: React.FC<MainCombinedProps> = ({
 
   const [lang, setLang] = React.useState('ar');
   const [calendar, setCalendar] = React.useState('hijri');
-  const [layout, setLayout] = React.useState('1');
+  const [layout, setLayout] = React.useState('4');
   const [mode, setMode] = React.useState('12');
   const [m, setM] = React.useState(1);
   const [d, setD] = React.useState(1);
@@ -61,6 +62,8 @@ const Main: React.FC<MainCombinedProps> = ({
     <Root>
       <Layout>
         <Layout.Main>
+
+          {/* <ClockWidget mode="12" /> */}
 
           {/* <div style={{ display: 'flex', color: '#fff', fontSize: 60 }}>
             <Clock />
@@ -81,9 +84,10 @@ const Main: React.FC<MainCombinedProps> = ({
             <Digit value={9} />
           </div> */}
 
+
           <DateTimeWidget
-            layout={layout}
-            lang={lang}
+            layout="2"
+            lang="en"
             timeMode={mode}
             calendar={calendar}
             weekday={_date.weekday}
@@ -91,43 +95,40 @@ const Main: React.FC<MainCombinedProps> = ({
             textColor={photo.colors[2]}
             altTextColor={photo.colors[1]}
             backgroundColor={photo.colors[0]}
-            />
+          />
 
-          <div style={{ color: '#fff', fontSize: 100 }}>
-            <Chameleon watch={[mode]}>
-              <Digits value={mode} outDuration={0} />
-            </Chameleon>
-          </div>
-          
 
-          <div>
-            <Group>
-              <Button onClick={() => setD(v => v === 31 ? 1 : v + 1)}>Next day</Button>
-              <Button onClick={() => setD(v => v === 1 ? 31 : v - 1)}>Prev day</Button>
-            </Group>
-            <Group>
-              <Button onClick={() => setM(v => v === 12 ? 1 : v + 1)}>Next month {m}</Button>
-              <Button onClick={() => setM(v => v === 1 ? 12 : v - 1)}>Prev month</Button>
-            </Group>
-            <Group>
-              <Button onClick={() => setLang('ar')}>Ar</Button>
-              <Button onClick={() => setLang('en')}>En</Button>
-            </Group>
-            <Group>
-              <Button onClick={() => setCalendar('hijri')}>Hijri</Button>
-              <Button onClick={() => setCalendar('gregorian')}>Gregorian</Button>
-            </Group>
-            <Group>
-              <Button onClick={() => setMode('12')}>Mode 12</Button>
-              <Button onClick={() => setMode('24')}>Mode 24</Button>
-            </Group>
-            <Group>
-              <Button onClick={() => setLayout('1')}>Layout 1</Button>
-              <Button onClick={() => setLayout('2')}>Layout 2</Button>
-              <Button onClick={() => setLayout('3')}>Layout 3</Button>
-              <Button onClick={() => setLayout('4')}>Layout 4</Button>
-            </Group>
-          </div>
+          {/* {
+            content.type === 'hadeeth_nabawi' && (
+              <HadeethWidget
+                head={content.head}
+                content={content.content}
+                tail={content.tail}
+                textColor={photo.colors[2]}
+                altTextColor={photo.colors[1]}
+                backgroundColor={photo.colors[0]}
+              />
+            )
+          }
+
+          {
+            content.type === 'quran' && (
+              <QuranWidget
+                // head={content.head} // disabled temporarily
+                content={content.content}
+                // tail={content.tail} // disabled temporarily
+                translation={content.translation}
+                showTranslation={false}
+                textColor={photo.colors[2]}
+                altTextColor={photo.colors[1]}
+                backgroundColor={photo.colors[0]}
+                sura={content.source ? +content.source?.split(':')[0] : undefined}
+                aya={content.source ? +content.source?.split(':')[1] : undefined}
+              />
+            )
+          } */}
+
+
 
           {/* {
             content.type === 'hadeeth_nabawi' && (
